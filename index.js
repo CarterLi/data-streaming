@@ -1,3 +1,5 @@
+/* global ResizeObserver */
+
 angular.module('app', [])
 .controller('RootController', function ($scope) {
   this.items = [
@@ -13,7 +15,10 @@ angular.module('app', [])
     { title: '核心系统', info: '用户信息查询', duration: 16 },
     { title: 'ESB', info: '转账', duration: 16 },
   ];
-  this.chunks = [];
+  this.addItem = () => {
+    this.items.push({ title: 'ESB', info: '转账', duration: 16 });
+  };
+
 })
 .directive('dataStreaming', function () {
   /**
@@ -37,25 +42,50 @@ angular.module('app', [])
 
   return {
     restrict: 'E',
+    template: `
+<div>
+  <ul ng-repeat="line in chunks track by $index">
+    <li ng-repeat="item in line">
+      <header ng-bind="item.title"></header>
+      <p>
+        <i class="fa fa-wrench" aria-hidden="true"></i>
+        <span ng-bind="item.info"></span>
+      </p>
+      <p>
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        <span ng-bind="item.duration + ' ms'"></span>
+      </p>
+      <svg ng-if="$index < line.length - 1" width="85" height="11" class="jtk-connector">
+        <path d="M 9.5 0 L 50.5 0 M 50.5 0 L 21.5 0 M 22 0 L 82 0" transform="translate(0,5.5)" fill="none" stroke="#61B7CF" style="" stroke-width="2" />
+        <path d="M82,0 L71,5.5 L75.147,0 L71,-5.5 L82,0" stroke="#61B7CF" fill="#61B7CF" transform="translate(0,5.5)" />
+      </svg>
+      <svg ng-if="$index === line.length - 1" width="73" height="101.5" class="jtk-connector">
+        <path d="M 10.5 0 L 51.5 0 M 51 0 L 65 0 M65 0 A 5 5 0 0,1 70 5 M 70 5 L 70 88 M70 88 A 5 5 0 0,1 65 93 M 65 93 L 10 93 " transform="translate(0,3)" fill="none" stroke="#61B7CF" stroke-width="2"></path>
+        <path d="M10,93 L21,87.5 L16.853,93 L21,98.5 L10,93" class="" stroke="#61B7CF" fill="#61B7CF" transform="translate(0,3)"></path>
+      </svg>
+    </li>
+  </ul>
+</div>`,
     scope: {
-      src: '=',
-      target: '=',
+      data: '=',
     },
-    link(scope, element, attrs) {
+    link(scope, element) {
       element = element[0];
+      scope.chunks = [];
+
       if (typeof ResizeObserver !== undefined) {
-        const ro = new ResizeObserver( ([entry]) => {
+        const ro = new ResizeObserver(([entry]) => {
           const width = entry.contentRect.width;
-          scope.$parent.$applyAsync(() => {
-            chunkItemsPerLine(width, scope.src, scope.target);
-          });
+          scope.$apply(() => chunkItemsPerLine(width, scope.data, scope.chunks));
         });
 
         ro.observe(element);
         scope.$on('$destroy', () => ro.disconnect());
       } else {
-        chunkItemsPerLine(element.clientWidth, scope.src, scope.target);
+        chunkItemsPerLine(element.clientWidth, scope.data, scope.chunks);
       }
+
+      scope.$watchCollection('data', () => chunkItemsPerLine(element.clientWidth, scope.data, scope.chunks));
     }
   };
 });

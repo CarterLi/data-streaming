@@ -1,0 +1,57 @@
+body {
+  background: #f6f5f4; }
+
+x-data-streaming {
+  display: block; }
+  x-data-streaming div {
+    width: min-content;
+    margin: 0 auto; }
+  x-data-streaming ul {
+    display: flex;
+    margin: 0 72px;
+    padding: 0; }
+    x-data-streaming ul + ul {
+      margin-top: 18px; }
+    x-data-streaming ul svg {
+      position: absolute;
+      top: calc(50% - 5.5px); }
+    x-data-streaming ul:last-of-type li:last-of-type svg {
+      display: none; }
+    x-data-streaming ul:nth-of-type(odd) li:not(:last-of-type) {
+      margin-right: 72px; }
+      x-data-streaming ul:nth-of-type(odd) li:not(:last-of-type) svg {
+        left: 136px; }
+    x-data-streaming ul:nth-of-type(odd) li:last-of-type svg {
+      right: -63px; }
+    x-data-streaming ul:nth-of-type(even) {
+      flex-direction: row-reverse; }
+      x-data-streaming ul:nth-of-type(even) li:not(:last-of-type) {
+        margin-left: 72px; }
+        x-data-streaming ul:nth-of-type(even) li:not(:last-of-type) svg {
+          left: -75px; }
+      x-data-streaming ul:nth-of-type(even) li:last-of-type svg {
+        left: -63px; }
+      x-data-streaming ul:nth-of-type(even) svg {
+        transform: scaleX(-1); }
+  x-data-streaming li {
+    color: white;
+    background: #0dade6;
+    width: 145px;
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+    position: relative;
+    border-radius: 4px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5); }
+  x-data-streaming header {
+    font-weight: bold;
+    border-bottom: 1px solid;
+    padding: 8px 0;
+    margin-bottom: 2px; }
+  x-data-streaming p {
+    margin: 0;
+    padding: 4px 8px;
+    display: flex; }
+    x-data-streaming p span {
+      flex: 1;
+      margin-right: 13px; }

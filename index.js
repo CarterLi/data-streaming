@@ -73,7 +73,7 @@ angular.module('app', [])
       element = element[0];
       scope.chunks = [];
 
-      if (typeof ResizeObserver !== undefined) {
+      if (typeof ResizeObserver !== 'undefined') {
         const ro = new ResizeObserver(([entry]) => {
           const width = entry.contentRect.width;
           scope.$apply(() => chunkItemsPerLine(width, scope.data, scope.chunks));
